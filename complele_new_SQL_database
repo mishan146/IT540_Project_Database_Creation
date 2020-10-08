@@ -1,0 +1,312 @@
+
+
+DROP TABLE IF EXISTS `country`;
+
+CREATE TABLE `country` (
+  `COU_ID` int(11) NOT NULL,
+  `COU_NAME` varchar(255) DEFAULT NULL,
+  `COU_CONTINENT` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`COU_ID`)
+);
+
+
+INSERT INTO `country` VALUES (1111,'USA','North America'),(1112,'UK','Europe'),(1113,'Namibia','Africa'),(1114,'South Sudan','Africa'),(1115,'Tanzania','Africa'),(1116,'Tunisia','Africa'),(1117,'Laos','Asia'),(1118,'United Arab Emirates','Middle East '),(1119,'Belgium','Europe'),(1120,'Italy (Italia)','Europe'),(1121,'Canada','North America'),(1122,'Dominican Republic (Republica Dominicana)','North America'),(1123,'Greenland','North America'),(1124,'Saint Martin','North America'),(1125,'Saint Pierre and Miquelon','North America'),(1126,'Turks and Caicos','North America'),(1127,'Brazil (Brasil)','South America'),(1128,'Fiji','Oceanie'),(1129,'New Zealand','Oceanie'),(1130,'Tonga','Oceanie'),(1131,'Qatar','Middle East ');
+
+DROP TABLE IF EXISTS `address`;
+
+CREATE TABLE `address` (
+  `ADD_ID` int(11) NOT NULL,
+  `ADD_STREET` varchar(255) DEFAULT NULL,
+  `ADD_CITY` varchar(255) DEFAULT NULL,
+  `ADD_STATE` varchar(255) DEFAULT NULL,
+  `ADD_ZIPCODE` varchar(255) DEFAULT NULL,
+  `COU_ID` int(11) DEFAULT NULL,
+  PRIMARY KEY (`ADD_ID`),
+  KEY `COU_ID_idx` (`COU_ID`),
+  CONSTRAINT `COUT_IT` FOREIGN KEY (`COU_ID`) REFERENCES `country` (`COU_ID`)
+);
+
+INSERT INTO `address` VALUES (7111,'Queen Street','East Natchitoches',' PA','66419',1111),(7112,'Heath Road','Lyon',' WV','33299',1111),(7113,'Cherry Tree Close','Willow Run',' IL','28305',1111),(7114,'Meadowside','Conyersville',' AZ','28123',1111),(7115,'The Meadows','Mount Baker',' NY','27045',1111),(7116,'Forge Close','Farmington Lake',' OK','96140',1111),(7117,'Scott Street','Martins Corner',' TX','31533',1111),(7118,'St Andrew\'s Close','Pickerel Narrows',' MT','17088',1111),(7119,'Grange Drive','Willaha',' OH','30060',1111),(7120,' Barn Close','Center',' MA','97063',1111),(7121,'The Cedars','Spring City',' MS','35474',1111),(7122,'Portland Road','Mittenlane',' TX','31527',1111),(7123,'The Beeches','East Waterford','ME','54003',1111),(7124,'Hamilton Close','Coltman','WV','25022',1111),(7125,'Falcon Close','Scottsville','KS','71154',1111),(7126,'Kingfisher Drive','Hebron','AZ','92505',1111),(7127,'Park Grove','Longview','MA','28420',1111),(7128,'Thomas Street','Emerson','MT','97402',1111),(7129,'South Avenue','North Knoxville','AL','98606',1111),(7130,'Bristol Road','Momford Landing','IN','36606',1111),(7131,'Ivy Lane','Ipswich','IA','95690',1111),(7132,'Woodside Avenue','Storms','TX','72718',1111),(7133,'Churchill Close','Kalauao','SD','52774',1111),(7134,'Mayfield Avenue','Farwell','FL','47637',1111),(7135,'Forest Road','Brentwood Village','LA','39322',1111),(7136,'Maple Avenue','Wilhelm Park','MT','63460',1111),(7137,'Rectory Road','Bannister Acres','NY','98068',1111),(7138,'Burnside','Bent Pine','VA','89507',1111),(7139,'Larch Close','Mitchell','AZ','89101',1111),(7140,'Bankside','Social Circle','NY','63157',1111),(7141,'Poplar Close','Kreutzberg','NY','60634',1111),(7142,'Cumberland Road','Cimarron','LA','98068',1111),(7143,'Albert Road','Brookhaven','LA','89507',1111),(7145,'Heathfield Road','London',NULL,'HP14 3LG',1112),(7146,'Redwood Close','Manchester',NULL,'NE40 4JY',1112),(7147,'Woodlands Road','Sheffield',NULL,'RH10 4TA',1112),(7148,'Derwent Road','Liverpool',NULL,'B78 3LQ',1112),(7149,'Vicarage Lane','London',NULL,'BL0 9AD',1112),(7150,'Grange Lane','London',NULL,'HP14 3LG',1112),(7151,'Wharf Road','London',NULL,'NE40 4JY',1112),(7152,'Wilson Road','Belfast',NULL,'RH10 4TA',1112),(7155,'Second Avenue','Cardiff',NULL,'HP14 3LG',1112),(7156,'Douglas Road','Luton',NULL,'NE40 4JY',1112),(7157,'Back Street','Lincoln',NULL,'CT15 4BE',1112),(7158,'Canterbury Close','Chester',NULL,'IP21 5AS',1112),(7159,'Park Close','Liverpool',NULL,'IP31 2SD',1112),(7160,'Canterbury Close','Cardiff',NULL,'G62 6LS',1112),(7161,'Park Close','Cardiff',NULL,'GL3 1NR',1112),(7162,'Woodlands Road','Scottsville','KS','71154',1111),(7163,'Derwent Road','Hebron','AZ','92505',1111),(7164,'Vicarage Lane','Longview','MA','28420',1111);
+
+DROP TABLE IF EXISTS `person`;
+
+CREATE TABLE `person` (
+  `P_ID` int(11) NOT NULL,
+  `P_FNAME` varchar(255) DEFAULT NULL,
+  `P_LNAME` varchar(255) DEFAULT NULL,
+  `P_DOB` date DEFAULT NULL,
+  `P_GENDER` varchar(255) DEFAULT NULL,
+  `P_EMAIL` varchar(255) DEFAULT NULL,
+  `ADD_ID` int(11) DEFAULT NULL,
+  PRIMARY KEY (`P_ID`),
+  KEY `FK` (`ADD_ID`),
+  CONSTRAINT `ADD` FOREIGN KEY (`ADD_ID`) REFERENCES `address` (`ADD_ID`)
+);
+
+
+INSERT INTO `person` VALUES (8111,'Ramiro','Beckford','1970-11-26','Male','ramiro.beckford@de.com',7132),(8112,'Louis','Raatz','1970-12-03','Male','louis.raatz@de.com',7133),(8113,'Micheal','Shew','1971-01-08','Male','micheal.shew@de.com',7134),(8114,'Moshe','Heinlein','1973-11-25','Male','moshe.heinlein@de.com',7135),(8115,'Rolando','Kane','1974-01-19','Male','rolando.kane@de.com',7136),(8116,'Bob','Normand','1977-02-07','Male','bob.normand@de.com',7137),(8117,'Harlan','Overfield','1977-10-22','Male','harlan.overfield@de.com',7138),(8118,'Reynaldo','Enger','1978-01-04','Male','reynaldo.enger@de.com',7139),(8119,'Cliff','Franceschi','1979-10-20','Male','cliff.franceschi@de.com',7140),(8120,'Riley','Fairclough','1980-04-13','Male','riley.fairclough@de.com',7141),(8121,'Ivey','Delange','1980-06-04','Female','ivey.delange@de.com',7142),(8122,'Justine','Mahan','1981-10-26','Female','justine.mahan@de.com',7143),(8123,'Gabrielle','Lucian','1983-03-18','Female','gabrielle.lucian@de.com',7145),(8124,'Alica','Charney','1984-01-07','Female','alica.charney@de.com',7146),(8125,'Santana','Hathorn','1984-09-03','Female','santana.hathorn@de.com',7147),(8126,'Tina','Tackett','1984-10-15','Female','tina.tackett@de.com',7148),(8127,'Phuong','Bissett','1985-01-26','Female','phuong.bissett@de.com',7149),(8128,'Wan','Berube','1985-05-03','Female','wan.berube@de.com',7150),(8129,'Magaret','Mundo','1987-07-02','Female','magaret.mundo@de.com',7151),(8130,'Patience','Avant','1987-08-02','Female','patience.avant@de.com',7152),(8131,'Tristan','Burkhart','1987-12-27','Male','tristan.burkhart@de.com',7124),(8132,'Kenny','Bulman','1988-08-25','Male','kenny.bulman@de.com',7125),(8133,'Omar','Covell','1988-12-25','Male','omar.covell@de.com',7126),(8134,'Donovan','Mckinny','1989-05-21','Male','donovan.mckinny@de.com',7127),(8135,'Domenic','Huber','1990-07-09','Male','domenic.huber@de.com',7128),(8136,'Klara','Moreno','1980-06-04','Female','klara.moreno@de.com',7129),(8137,'Latrice','Kaup','1981-10-26','Female','latrice.kaup@de.com',7130),(8138,'Shiloh','Robare','1983-03-18','Female','shiloh.robare@de.com',7131),(8139,'Lea','Black','1984-01-07','Female','lea.black@de.com',7162),(8140,'Noelle','Smith','1984-09-03','Female','noelle.smith@de.com',7163),(8141,'Brittany','Phillips','1984-10-15','Female','brittany.phillips@de.com',7164);
+
+DROP TABLE IF EXISTS `department`;
+
+CREATE TABLE `department` (
+  `DPT_ID` int(11) NOT NULL,
+  `DPT_NAME` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`DPT_ID`)
+) ;
+
+INSERT INTO `department` VALUES (9111,'HR'),(9112,'Accounting'),(9113,'Marketing'),(9114,'IT'),(9115,'Legal'),(9116,'Maintenance'),(9117,'Cooking'),(9118,'Agency of Extranet Backup'),(9119,'Application Backup Team'),(9120,'Branch of Computer Networking and Security'),(9121,'Branch of Intranet Development'),(9122,'Branch of Software Installation'),(9123,'Code Implementation Team'),(9124,'Department of Application Connectivity'),(9125,'Division of Code Maintenance'),(9126,'Division of Extranet Backup'),(9127,'Mainframe Technology and Security Division'),(9128,'Multimedia Troubleshooting Department'),(9129,'Office of Hardware Installation'),(9130,'Office of Software Administration and Computer Connectivity'),(9131,'Programming Development and Troubleshooting Committee'),(9132,'Telecommunications Mainframe Connectivity ');
+
+
+
+DROP TABLE IF EXISTS `paystub`;
+
+CREATE TABLE `paystub` (
+  `Pay_ID` int(11) NOT NULL,
+  `Pay_TYPE` varchar(255) DEFAULT NULL,
+  `Pay_RATE` float DEFAULT NULL,
+  PRIMARY KEY (`Pay_ID`)
+) ;
+
+INSERT INTO `paystub` VALUES (2221,'Salaried',55000),(2223,'Salaried',85000),(2224,'Salaried',70000),(2225,'Hourly',15),(2226,'Salaried',150000),(2227,'Salaried',200000),(2228,'Salaried',16000),(2229,'Salaried',20000),(2230,'Hourly',9),(2231,'Salaried',56000),(2232,'Salaried',86000),(2233,'Salaried',71000),(2234,'Hourly',20),(2235,'Salaried',57000),(2236,'Salaried',87000),(2237,'Salaried',72000),(2238,'Salaried',57000),(2239,'Salaried',42000),(2240,'Hourly',14),(2241,'Salaried',57000),(2242,'Salaried',57000);
+
+
+DROP TABLE IF EXISTS `position`;
+
+CREATE TABLE `position` (
+  `POS_ID` int(11) NOT NULL,
+  `POS_TITLE` varchar(255) DEFAULT NULL,
+  `Pay_ID` int(11) DEFAULT NULL,
+  `DEPT_ID` int(11) DEFAULT NULL,
+  PRIMARY KEY (`POS_ID`),
+  KEY `FK` (`Pay_ID`,`DEPT_ID`),
+  KEY `DEPT_ID_idx` (`DEPT_ID`),
+  CONSTRAINT `DEPT_ID` FOREIGN KEY (`DEPT_ID`) REFERENCES `department` (`DPT_ID`),
+  CONSTRAINT `Pay_ID` FOREIGN KEY (`Pay_ID`) REFERENCES `paystub` (`Pay_ID`)
+) ;
+
+INSERT INTO `position` VALUES (3331,'Marketing  Expert',2228,9113),(3332,'HR Expert',2228,9111),(3334,'Lawyer',2229,9115),(3336,'Maintenance Engineer',2228,9116),(3338,'Project Manager',2229,9114),(3340,'Accountant',2228,9112),(3342,'Manager',2229,9118),(3344,'Chef',2230,9117),(3346,'HR Expert',2224,9111),(3348,'Marketing  Expert',2224,9113),(3350,'Tester',2224,9114),(3352,'Lawyer',2224,9115),(3354,'CEO',2226,NULL),(3356,'CFO',2226,9112),(3358,'COO',2226,NULL),(3360,'CIS',2226,9114),(3362,'Chef',2225,9117),(3364,'Maintenance Engineer',2225,9116),(3366,'Project Manager',2223,9114),(3368,'Accountant',2223,9112),(3370,'Manager',2223,9118),(3372,'Systems Analyst',2223,9114),(3374,'Developer',2223,9114),(3376,'Project Manager',2223,9114),(3378,'Project Manager',2223,9114),(3380,'Project Manager',2229,9114);
+
+
+DROP TABLE IF EXISTS `employee`;
+CREATE TABLE `employee` (
+  `Emp_ID` int(11) NOT NULL,
+  `Emp_FIRSTDAY` date DEFAULT NULL,
+  `Emp_LASTDAY` date DEFAULT NULL,
+  `POS_ID` int(11) DEFAULT NULL,
+  `P_ID` int(11) DEFAULT NULL,
+  PRIMARY KEY (`Emp_ID`),
+  KEY `FK` (`POS_ID`,`P_ID`),
+  KEY `P_ID_idx` (`P_ID`),
+  CONSTRAINT `employee_ibfk_1` FOREIGN KEY (`POS_ID`) REFERENCES `position` (`POS_ID`),
+  CONSTRAINT `employee_ibfk_2` FOREIGN KEY (`P_ID`) REFERENCES `person` (`P_ID`)
+) ;
+
+INSERT INTO `employee` VALUES (4441,'2000-11-07',NULL,3346,8111),(4442,'2002-08-19',NULL,3348,8112),(4443,'2003-11-20',NULL,3350,8113),(4444,'2004-09-14',NULL,3352,8114),(4445,'2005-03-04',NULL,3354,8115),(4446,'2006-07-17',NULL,3356,8116),(4447,'2007-08-10',NULL,3358,8117),(4448,'2009-05-11',NULL,3360,8118),(4449,'2009-07-21',NULL,3362,8119),(4450,'2009-09-14',NULL,3364,8120),(4451,'2009-12-31',NULL,3366,8121),(4452,'2010-03-03',NULL,3368,8122),(4453,'2011-02-01',NULL,3370,8131),(4454,'2011-03-02',NULL,3372,8132),(4455,'2011-03-28',NULL,3374,8133),(4456,'2012-01-30',NULL,3362,8134),(4457,'2013-04-04',NULL,3362,8135),(4458,'2013-07-18',NULL,3374,8136),(4459,'2013-08-15',NULL,3364,8137),(4460,'2013-11-05',NULL,3352,8138),(4461,'2013-12-02',NULL,3331,8123),(4462,'2015-12-07',NULL,3332,8124),(4463,'2016-03-21',NULL,3334,8125),(4464,'2002-08-19',NULL,3336,8126),(4465,'2003-11-20',NULL,3338,8127),(4466,'2004-09-14',NULL,3340,8128),(4467,'2005-03-04',NULL,3342,8129),(4468,'2017-05-05',NULL,3344,8130),(4469,'2011-03-28',NULL,3376,8139),(4470,'2012-01-30',NULL,3378,8140),(4471,'2013-04-04',NULL,3380,8141);
+
+DROP TABLE IF EXISTS `project`;
+
+CREATE TABLE `project` (
+  `PR_ID` int(11) NOT NULL,
+  `PR_NAME` varchar(255) DEFAULT NULL,
+  `PR_AMOUNT` float DEFAULT NULL,
+  `PR_START_DATE` date DEFAULT NULL,
+  `PR_END_DATE` date DEFAULT NULL,
+  `Mangr_ID` int(11) DEFAULT NULL,
+  PRIMARY KEY (`PR_ID`),
+  KEY `FK` (`Mangr_ID`),
+  CONSTRAINT `Emp_ID` FOREIGN KEY (`Mangr_ID`) REFERENCES `employee` (`Emp_ID`)
+) ;
+INSERT INTO `project` VALUES (5111,'Gluten Free Pizza Addition Phase 1',90000,'2019-01-14',NULL,4469),(5112,'Painting Phase 1',95000,'2019-01-15',NULL,4470),(5113,'Client Tracker Software Phase 1',100000,'2019-01-21',NULL,4471),(5114,'Gluten Free Pizza Addition Phase 2',105000,'2019-01-28',NULL,4451),(5115,'Painting Phase 2',110000,'2019-02-05',NULL,4451),(5116,'Client Tracker Software Phase 2',115000,'2019-02-26',NULL,4465),(5117,'Gluten Free Sandwich Addition Phase 1',90000,'2019-03-04',NULL,4465),(5118,'Kitchen Renewal Phase 1',95000,'2019-03-25',NULL,4469),(5119,'Order Software Phase 1',100000,'2019-03-27',NULL,4470),(5120,'Gluten Free Sandwich Addition Phase 2',105000,'2019-04-12',NULL,4471),(5121,'Kitchen Renewal Phase 2',110000,'2019-05-13',NULL,4451),(5122,'Order Software Phase 2',115000,'2019-05-17',NULL,4451),(5123,'Gluten Free Pizza Addition Phase 3',80000,'2019-06-05',NULL,4465),(5124,'Painting Phase 3',70000,'2019-06-20',NULL,4465),(5125,'Client Tracker Software Phae 3',65000,'2019-07-10',NULL,4469),(5126,'Gluten Free Sandwich Addition Phase 3',42500,'2019-07-22',NULL,4470),(5127,'Kitchen Renewal Phase 3',26500,'2019-08-05',NULL,4471),(5128,'Order Software Phase 3',10500,'2019-08-14',NULL,4451),(5129,'Gluten Free Sandwich Addition Phase 4',55000,'2019-09-10',NULL,4451),(5130,'Kitchen Renewal Phase 4',68000,'2019-09-13',NULL,4465),(5131,'Order Software Phase 4',37500,'2019-09-16',NULL,4469);
+
+
+
+DROP TABLE IF EXISTS `projecttask`;
+
+CREATE TABLE `projecttask` (
+  `PT_ID` int(11) NOT NULL,
+  `PT_NAME` varchar(255) DEFAULT NULL,
+  `PR_ID` int(11) DEFAULT NULL,
+  `Emp_ID` int(11) DEFAULT NULL,
+  PRIMARY KEY (`PT_ID`),
+  KEY `FK` (`PR_ID`,`Emp_ID`),
+  KEY `Emp_idx` (`Emp_ID`),
+  CONSTRAINT `projecttask_ibfk_1` FOREIGN KEY (`PR_ID`) REFERENCES `project` (`PR_ID`),
+  CONSTRAINT `projecttask_ibfk_2` FOREIGN KEY (`Emp_ID`) REFERENCES `employee` (`Emp_ID`)
+);
+
+
+INSERT INTO `projecttask` VALUES (5551,'Make Posters ',5111,4442),(5552,'Research Best Ingredients',5111,4443),(5553,'Menu ',5111,4449),(5554,'Receipe Imprelemntation',5111,4450),(5555,'Legal Implications',5111,4444),(5556,'Old Paint Removal',5112,4461),(5557,'Cost Estimation',5112,4452),(5558,'Find Subcontractors',5112,4453),(5559,'Painting',5112,4461),(5560,'Prject Charter',5113,4467),(5561,'Business Rules',5113,4455),(5562,'Software Design Implementation',5113,4456),(5563,'Testing ',5114,4457),(5564,'Make Posters ',5114,4468),(5565,'Research Best Ingredients',5114,4468),(5566,'Menu ',5114,4450),(5567,'Receipe Imprelemntation',5114,4450),(5568,'Legal Implications',5114,4444),(5569,'Old Paint Removal',5115,4459),(5570,'Cost Estimation',5115,4459),(5571,'Find Subcontractors',5115,4461),(5572,'Painting',5115,4452),(5573,'Prject Charter',5116,4453),(5574,'Business Rules',5116,4467),(5575,'Software Design Implementation',5116,4454),(5576,'Testing ',5116,4458);
+
+
+DROP TABLE IF EXISTS `foodtruck`;
+
+CREATE TABLE `foodtruck` (
+  `FT_ID` int(11) NOT NULL,
+  `FT_LEGAL_NAME` varchar(255) DEFAULT NULL,
+  `FT_TYPICAL_NAME` varchar(255) DEFAULT NULL,
+  `ADD_ID` int(11) DEFAULT NULL,
+  PRIMARY KEY (`FT_ID`),
+  KEY `ADDID_idx` (`ADD_ID`),
+  CONSTRAINT `ADDID` FOREIGN KEY (`ADD_ID`) REFERENCES `address` (`ADD_ID`)
+) ;
+
+INSERT INTO `foodtruck` VALUES (3111,'Tasty Truck','TT',7111),(3112,'Pull Up Pros','PUP',7112),(3113,'Trucking Delicious','TD',7113),(3114,'Meals On Wheels','MOW',7114),(3115,'Chew Chew Truck','CCT',7115),(3116,'Snack Rack','SR',7116),(3117,'Four Wheeled Flavor','FWF',7117),(3118,'Flavor Town Truck','FTT',7118),(3119,'Hungry Engines','HE',7119),(3120,'Delicious Delivery','DD',7120),(3121,'Delicious Delivered','DD',7121),(3122,'Welcome Wagon','WW',7122),(3123,'Trucks Full Of Taste','TFOT',7123),(3124,'Gourmet On The Go','GOTG',7155),(3125,'Food On The Move','FOTF',7156),(3126,'Moving Food','MF',7157),(3127,'Rolling Orders','RO',7158),(3128,'Anywhere Eats','AE',7159),(3129,'Food To You','FTY',7160),(3130,'Four Wheeled Meals','FWF',7161);
+
+
+
+DROP TABLE IF EXISTS `contracts`;
+
+CREATE TABLE `contracts` (
+  `CON_ID` int(11) NOT NULL,
+  `CON_DATE` date DEFAULT NULL,
+  `CON_TYPE` varchar(255) DEFAULT NULL,
+  `CON_RATE` float DEFAULT NULL,
+  `FT_ID` int(11) DEFAULT NULL,
+  PRIMARY KEY (`CON_ID`),
+  KEY `FK` (`FT_ID`),
+  CONSTRAINT `contracts_ibfk_1` FOREIGN KEY (`FT_ID`) REFERENCES `foodtruck` (`FT_ID`)
+);
+
+INSERT INTO `contracts` VALUES (6111,'2019-01-01','Fixed',20000,3111),(6112,'2019-01-14','Fixed',25000,3112),(6113,'2019-01-21','Fixed',30000,3113),(6114,'2019-01-22','Fixed',40000,3114),(6115,'2019-02-01','Fixed',15000,3115),(6116,'2019-02-15','Fixed',10000,3116),(6117,'2019-02-21','Fixed',17000,3117),(6118,'2019-02-22','Fixed',20000,3118),(6119,'2019-03-05','Fixed',20000,3119),(6120,'2019-03-12','Fixed',50000,3120),(6121,'2019-04-12','Fixed',20000,3121),(6122,'2019-04-29','Fixed',20000,3122),(6123,'2019-05-07','Fixed',20000,3123),(6124,'2019-05-17','Hourly',20,3124),(6125,'2019-05-24','Hourly',19,3125),(6126,'2019-05-27','Hourly',18,3126),(6127,'2019-06-18','Hourly',21,3127),(6128,'2019-07-05','Hourly',22,3128),(6129,'2019-07-26','Hourly',23,3129),(6130,'2019-08-05','Hourly',25,3130);
+
+
+
+DROP TABLE IF EXISTS `timecard`;
+
+CREATE TABLE `timecard` (
+  `TC_ID` int(11) NOT NULL,
+  `TC_START_DATE` date DEFAULT NULL,
+  `TC_END_DATE` date DEFAULT NULL,
+  `TC_TOTALHOURS` float DEFAULT NULL,
+  `PT_ID` int(11) DEFAULT NULL,
+  `CON_ID` int(11) DEFAULT NULL,
+  PRIMARY KEY (`TC_ID`),
+  KEY `pt_id_idx` (`PT_ID`),
+  KEY `con_id_idx` (`CON_ID`),
+  CONSTRAINT `timecard_ibfk_2` FOREIGN KEY (`PT_ID`) REFERENCES `projecttask` (`PT_ID`),
+  CONSTRAINT `timecard_ibfk_3` FOREIGN KEY (`CON_ID`) REFERENCES `contracts` (`CON_ID`)
+);
+INSERT INTO `timecard` VALUES (8881,'2019-01-01','2019-01-08',40,5551,6111),(8882,'2019-01-14','2019-01-21',40,5552,6112),(8883,'2019-01-21','2019-01-28',45,5553,6113),(8884,'2019-01-22','2019-01-29',45,5554,6114),(8885,'2019-02-01','2019-02-08',40,5555,6115),(8886,'2019-02-15','2019-02-22',36,5556,6116),(8887,'2019-02-21','2019-02-28',40,5557,6117),(8888,'2019-02-22','2019-03-01',40,5558,6118),(8889,'2019-03-05','2019-03-12',40,5559,6119),(8890,'2019-03-12','2019-03-19',40,5560,6120),(8891,'2019-04-12','2019-04-19',45,5561,6121),(8892,'2019-04-29','2019-05-06',40,5562,6122),(8893,'2019-05-07','2019-05-14',40,5563,6123),(8894,'2019-05-17','2019-05-24',36,5564,6124),(8895,'2019-05-24','2019-05-31',40,5565,6125),(8896,'2019-05-27','2019-06-03',36,5566,6126),(8897,'2019-06-18','2019-06-25',36,5567,6127),(8898,'2019-07-05','2019-07-12',40,5568,6128),(8899,'2019-07-26','2019-08-02',40,5569,6129),(8900,'2019-08-05','2019-08-12',40,5570,6130),(8901,'2019-05-24','2019-05-31',36,5571,6124),(8902,'2019-05-27','2019-06-03',36,5572,6125),(8903,'2019-06-18','2019-06-25',36,5573,6126),(8904,'2019-07-05','2019-07-12',36,5574,6127),(8905,'2019-07-26','2019-08-02',36,5575,6128),(8906,'2019-08-05','2019-08-12',36,5576,6129);
+DROP TABLE IF EXISTS `checksheet`;
+
+CREATE TABLE `checksheet` (
+  `CS_ID` int(11) NOT NULL,
+  `CS_DATE` date DEFAULT NULL,
+  `CS_TIME_OFF` float DEFAULT NULL,
+  `CS_HOLIDAY` tinyint(1) DEFAULT NULL,
+  `CS_OVERTIME` float DEFAULT NULL,
+  `P_ID` int(11) DEFAULT NULL,
+  `TC_ID` int(11) DEFAULT NULL,
+  PRIMARY KEY (`CS_ID`),
+  KEY `FK` (`P_ID`,`TC_ID`),
+  KEY `TC_ID` (`TC_ID`),
+  CONSTRAINT `P_ID` FOREIGN KEY (`P_ID`) REFERENCES `person` (`P_ID`),
+  CONSTRAINT `TC_ID` FOREIGN KEY (`TC_ID`) REFERENCES `timecard` (`TC_ID`)
+);
+
+
+
+DROP TABLE IF EXISTS `invoice`;
+
+CREATE TABLE `invoice` (
+  `INV_ID` int(11) NOT NULL,
+  `INV_DATE` date DEFAULT NULL,
+  `INV_AMOUNT` float DEFAULT NULL,
+  `PR_ID` int(11) DEFAULT NULL,
+  `CON_ID` int(11) DEFAULT NULL,
+  PRIMARY KEY (`INV_ID`),
+  KEY `FK` (`PR_ID`,`CON_ID`),
+  KEY `CON_ID_idx` (`CON_ID`),
+  CONSTRAINT `CON_ID` FOREIGN KEY (`CON_ID`) REFERENCES `contracts` (`CON_ID`),
+  CONSTRAINT `PR_ID` FOREIGN KEY (`PR_ID`) REFERENCES `project` (`PR_ID`)
+) ;
+
+INSERT INTO `invoice` VALUES (6661,'2019-01-24',60000,5111,6111),(6662,'2019-02-19',70000,5112,6112),(6663,'2019-02-22',80000,5113,6113),(6664,'2019-03-01',90000,5114,6114),(6665,'2019-03-01',100000,5115,6115),(6666,'2019-03-04',110000,5116,6116),(6667,'2019-03-25',120000,5117,6117),(6668,'2019-03-28',130000,5118,6118),(6669,'2019-04-02',140000,5119,6119),(6670,'2019-04-03',60000,5120,6120),(6671,'2019-04-05',70000,5121,6121),(6672,'2019-05-03',80000,5122,6122),(6673,'2019-05-27',90000,5123,6123),(6674,'2019-06-27',100000,5124,6124),(6675,'2019-07-09',110000,5125,6125),(6676,'2019-07-11',120000,5126,6126),(6677,'2019-07-30',130000,5127,6127),(6678,'2019-08-05',140000,5128,6128),(6679,'2019-09-05',40000,5129,6129),(6680,'2019-09-13',30000,5130,6130);
+
+
+DROP TABLE IF EXISTS `payment`;
+
+CREATE TABLE `payment` (
+  `PY_ID` int(11) NOT NULL,
+  `PY_DATE` date DEFAULT NULL,
+  `PY_TYPE` varchar(255) DEFAULT NULL,
+  `PY_AMOUNT` float DEFAULT NULL,
+  `INV_ID` int(11) DEFAULT NULL,
+  PRIMARY KEY (`PY_ID`),
+  KEY `FK` (`INV_ID`),
+  CONSTRAINT `INV_ID` FOREIGN KEY (`INV_ID`) REFERENCES `invoice` (`INV_ID`)
+) ;
+
+INSERT INTO `payment` VALUES (8001,'2019-03-06','Card',50000,6661),(8002,'2019-03-11','Cash',12000,6662),(8003,'2019-03-14','Card',13000,6663),(8004,'2019-03-15','Card',50000,6664),(8005,'2019-03-15','Card',12000,6665),(8006,'2019-04-03','Card',16000,6666),(8007,'2019-05-01','Card',12200,6667),(8008,'2019-05-17','Card',8400,6668),(8009,'2019-05-22','Card',4600,6669),(8010,'2019-05-29','Card',800,6670),(8011,'2019-06-10','Cash',70000,6671),(8012,'2019-06-11','Cash',80000,6672),(8013,'2019-06-28','Cash',90000,6673),(8014,'2019-07-04','Card',50000,6674),(8015,'2019-08-19','Card',12000,6675),(8016,'2019-08-26','Card',13000,6676),(8017,'2019-09-12','Card',100000,6677),(8018,'2019-10-07','Card',100000,6678),(8019,'2019-10-17','Card',40000,6679),(8020,'2019-11-06','Cash',25000,6680);
+
+
+
+
+
+
+DROP TABLE IF EXISTS `phone`;
+
+CREATE TABLE `phone` (
+  `PH_ID` int(11) NOT NULL,
+  `PH_NUMBER` int(20) DEFAULT NULL,
+  `P_ID` int(11) DEFAULT NULL,
+  PRIMARY KEY (`PH_ID`),
+  KEY `FK` (`P_ID`),
+  CONSTRAINT `P` FOREIGN KEY (`P_ID`) REFERENCES `person` (`P_ID`)
+) ;
+
+INSERT INTO `phone` VALUES (7794,1632960924,8123),(7795,1632960903,8124),(7796,1632960670,8125),(7797,1632960202,8126),(7798,1632960826,8127),(7799,1632960852,8128),(7800,1633960202,8129),(7801,1632960671,8130);
+
+
+DROP TABLE IF EXISTS `product`;
+
+CREATE TABLE `product` (
+  `PRO_ID` int(11) NOT NULL,
+  `PRO_NAME` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`PRO_ID`)
+);
+
+INSERT INTO `product` VALUES (5001,'Burgers'),(5002,'Fried Chicken'),(5003,'Pizza'),(5004,'Hot dog'),(5005,'Taco'),(5006,'Ice Cream'),(5007,'Crepe'),(5008,'Fries'),(5009,'Pretzel'),(5010,'Rice'),(5011,'Steak'),(5012,'Smoothie'),(5013,'Salad'),(5014,'Noodle'),(5015,'Pancake'),(5016,'Baguette'),(5017,'Donuts'),(5018,'Burrito'),(5019,'Milk Shake'),(5020,'Sandwish');
+
+
+
+DROP TABLE IF EXISTS `sales`;
+
+CREATE TABLE `sales` (
+  `S_ID` int(11) NOT NULL,
+  `FT_ID` int(11) DEFAULT NULL,
+  PRIMARY KEY (`S_ID`),
+  KEY `FK` (`FT_ID`),
+  CONSTRAINT `sales_ibfk_1` FOREIGN KEY (`FT_ID`) REFERENCES `foodtruck` (`FT_ID`)
+); 
+INSERT INTO `sales` VALUES (4111,3111),(4131,3111),(4112,3112),(4132,3112),(4113,3113),(4133,3113),(4114,3114),(4134,3114),(4115,3115),(4135,3115),(4116,3116),(4136,3116),(4117,3117),(4137,3117),(4118,3118),(4119,3119),(4120,3120),(4121,3121),(4122,3122),(4138,3122),(4123,3123),(4139,3123),(4124,3124),(4140,3124),(4125,3125),(4141,3125),(4126,3126),(4127,3127),(4128,3128),(4129,3129),(4130,3130);
+
+
+
+DROP TABLE IF EXISTS `salestransaction`;
+
+CREATE TABLE `salestransaction` (
+  `ST_ID` int(11) NOT NULL,
+  `ST_DATE` date DEFAULT NULL,
+  `ST_AMOUNT` float DEFAULT NULL,
+  `ST_QTE` int(11) DEFAULT NULL,
+  `PRO_ID` int(11) DEFAULT NULL,
+  `S_ID` int(11) DEFAULT NULL,
+  PRIMARY KEY (`ST_ID`),
+  KEY `S_ID_idx` (`S_ID`),
+  KEY `PRO_ID_idx` (`PRO_ID`),
+  CONSTRAINT `PRO_ID` FOREIGN KEY (`PRO_ID`) REFERENCES `product` (`PRO_ID`),
+  CONSTRAINT `S_ID` FOREIGN KEY (`S_ID`) REFERENCES `sales` (`S_ID`)
+) ;
+INSERT INTO `salestransaction` VALUES (11,'2019-01-02',7,1000,5001,4111),(12,'2019-01-31',5,4000,5002,4112),(13,'2019-02-06',9,600,5003,4113),(14,'2019-02-21',4,800,5004,4114),(15,'2019-02-26',5,1000,5005,4115),(16,'2019-03-07',3,1200,5006,4116),(17,'2019-03-08',3.99,1400,5007,4117),(18,'2019-03-14',4.5,1600,5008,4118),(19,'2019-04-03',2.5,1800,5009,4119),(20,'2019-04-10',7.99,2000,5010,4120),(21,'2019-05-07',8.5,2200,5011,4121),(22,'2019-05-14',4.5,400,5012,4122),(23,'2019-05-20',4,600,5013,4123),(24,'2019-06-05',6.5,800,5014,4124),(25,'2019-06-12',2.75,3000,5015,4125),(26,'2019-06-20',1.75,3200,5016,4126),(27,'2019-06-27',2.5,3400,5017,4127),(28,'2019-07-05',7,3600,5018,4128),(29,'2019-07-09',4,3800,5019,4129),(30,'2019-07-19',6,4000,5020,4130),(31,'2019-08-16',5,4200,5005,4131),(32,'2019-09-18',3,4400,5006,4132),(33,'2019-10-09',3.99,4600,5007,4133),(34,'2019-10-18',4.5,4800,5008,4134),(35,'2019-10-30',2.5,100,5009,4135),(36,'2019-10-30',7.99,5200,5010,4136),(37,'2019-10-30',8.5,5400,5011,4137),(38,'2019-10-30',4.5,5600,5012,4138),(39,'2019-10-30',4,5800,5013,4139),(40,'2019-10-30',6.5,6000,5014,4140),(41,'2019-10-30',6.5,7000,5014,4141);
+
+
+IT540_PROJECT_SQL
+Mishan, Ramkrishna
+Fri 11/15/2019 9:53 AM
+
+Mishan, Ramkrishna
+Fri 11/15/2019 9:26 AM
+(No message text)
+Mishan, Ramkrishna
+Fri 11/15/2019 9:24 AM
