@@ -1,0 +1,64 @@
+CREATE DEFINER=`admin`@`%` PROCEDURE `getOutstandingBill`()
+begin 
+select f.ft_legal_name as 'Food Truck', i.inv_amount as 'Invoice Amount', p.py_amount as 'Payment Amount', (i.inv_amount - p.py_amount) as 'Outstanding Bill'
+from foodtruck as f
+join project as pr on f.ft_id = pr.ft_id
+join invoice as i on pr.pr_id = i.pr_id
+join payment as p on i.inv_id = p.inv_id
+where (i.inv_amount - p.py_amount) != 0
+order by (i.inv_amount - p.py_amount) desc;
+end
+
+
+CREATE DEFINER=`admin`@`%` PROCEDURE `getMostSoldProduct`(in lim int)
+BEGIN
+select distinct(p.pro_name) as Product, s.st_qte as 'Most Sold Product', f.ft_legal_name as 'Food Truck', c.cou_name as 'Country'
+from product as p
+join salestransaction as s on p.pro_id = s.pro_id
+join sales as sa on s.s_id = sa.s_id
+join foodtruck as f on sa.ft_id = f.ft_id
+join address as a on f.add_id = a.add_id
+join country as c on a.cou_id = c.cou_id
+order by s.st_qte desc 
+limit lim;
+END
+
+CREATE DEFINER=`admin`@`%` PROCEDURE `getOutstandingBill`()
+begin 
+select f.ft_legal_name as 'Food Truck', i.inv_amount as 'Invoice Amount', p.py_amount as 'Payment Amount', (i.inv_amount - p.py_amount) as 'Outstanding Bill'
+from foodtruck as f
+join project as pr on f.ft_id = pr.ft_id
+join invoice as i on pr.pr_id = i.pr_id
+join payment as p on i.inv_id = p.inv_id
+where (i.inv_amount - p.py_amount) != 0
+order by (i.inv_amount - p.py_amount) desc;
+end
+
+CREATE DEFINER=`admin`@`%` PROCEDURE `mostBillableHourEmp`(in country varchar(255), in lim int)
+begin 
+select e.emp_id as 'Employee ID', concat(p.p_lname, ', ', p.p_fname) as 'Employee Name', c.cou_name as 'Country', t.tc_totalhours as 'Total Hours'
+from person as p
+join employee as e on p.p_id = e.p_id
+join address as a  on p.add_id = a.add_id
+join country as c on c.cou_id = a.cou_id
+join projecttask as pt on pt.emp_id = e.emp_id
+join timecard as t on t.pt_id = pt.pt_id
+where c.cou_name = country
+order by t.tc_totalhours desc
+limit lim;
+end
+
+CREATE DEFINER=`admin`@`%` PROCEDURE `numbOfFoodTruckPerCountry`()
+begin 
+select c.cou_continent as Continent, c.cou_name as Country , count(f.ft_legal_name) as 'Number of Food Truck'
+from foodtruck as f
+join address as a  on f.add_id = a.add_id
+join country as c on a.cou_id = c.cou_id
+group by c.cou_name
+order by count(f.ft_legal_name) desc;
+end
+stored procedures
+Diawara, Amina
+Thu 11/21/2019 6:41 PM
+Diawara, Amina
+Thu 11/21/2019 6:22 PM
