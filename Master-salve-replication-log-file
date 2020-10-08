@@ -1,0 +1,313 @@
+Master log Files
+mishan@mishan-VirtualBox:~$ sudo su -
+
+[sudo] password for mishan:
+root@mishan-VirtualBox:~# sudo apt update
+root@mishan-VirtualBox:~# sudo apt-get update
+root@mishan-VirtualBox:~# sudo apt-get install mysql-server
+root@mishan-VirtualBox:~# sudo mysql
+
+mysql> SELECT USER FROM mysql.user
+    -> ;
++------------------+
+| USER             |
++------------------+
+| replica          |
+| debian-sys-maint |
+| mysql.session    |
+| mysql.sys        |
+| root             |
++------------------+
+5 rows in set (0.00 sec)
+
+mysql> DROP USER 'replica'@'10.10.102.2';
+ERROR 1396 (HY000): Operation DROP USER failed for 'replica'@'10.10.102.2'
+mysql> DROP USER 'replica'@'localhost';
+ERROR 1396 (HY000): Operation DROP USER failed for 'replica'@'localhost'
+mysql> CREATE USER 'replica1'@'10.10.102.11' IDENTIFIED BY 'mishan1';
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> GRANT REPLICATION SLAVE ON *.* TO 'replica1'@'10.10.102.11';
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> service sshd start
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'service sshd start' at line 1
+mysql> exit
+Bye
+root@mishan-VirtualBox:~# service sshd start
+root@mishan-VirtualBox:~# service sshd status
+● ssh.service - OpenBSD Secure Shell server
+   Loaded: loaded (/lib/systemd/system/ssh.service; enabled; vendor preset: ena
+   Active: active (running) since Mon 2019-10-28 22:47:11 CDT; 12min ago
+  Process: 1035 ExecReload=/bin/kill -HUP $MAINPID (code=exited, status=0/SUCCE
+  Process: 1031 ExecReload=/usr/sbin/sshd -t (code=exited, status=0/SUCCESS)
+  Process: 710 ExecStartPre=/usr/sbin/sshd -t (code=exited, status=0/SUCCESS)
+ Main PID: 735 (sshd)
+    Tasks: 1 (limit: 4674)
+   CGroup: /system.slice/ssh.service
+           └─735 /usr/sbin/sshd -D
+
+Oct 28 22:47:12 mishan-VirtualBox systemd[1]: Reloading OpenBSD Secure Shell se
+Oct 28 22:47:12 mishan-VirtualBox sshd[735]: Received SIGHUP; restarting.
+Oct 28 22:47:12 mishan-VirtualBox systemd[1]: Reloaded OpenBSD Secure Shell ser
+Oct 28 22:47:12 mishan-VirtualBox sshd[735]: Server listening on 0.0.0.0 port 2
+Oct 28 22:47:12 mishan-VirtualBox sshd[735]: Server listening on :: port 22.
+Oct 28 22:47:12 mishan-VirtualBox systemd[1]: Reloading OpenBSD Secure Shell se
+Oct 28 22:47:12 mishan-VirtualBox sshd[735]: Received SIGHUP; restarting.
+Oct 28 22:47:12 mishan-VirtualBox systemd[1]: Reloaded OpenBSD Secure Shell ser
+Oct 28 22:47:12 mishan-VirtualBox sshd[735]: Server listening on 0.0.0.0 port 2
+Oct 28 22:47:12 mishan-VirtualBox sshd[735]: Server listening on :: port 22.
+
+root@mishan-VirtualBox:~# sudo mysql
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 3
+Server version: 5.7.27-0ubuntu0.18.04.1-log (Ubuntu)
+
+Copyright (c) 2000, 2019, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> SHOW MASTER STATUS\G
+*************************** 1. row ***************************
+             File: mysql-bin.000009
+         Position: 625
+     Binlog_Do_DB:
+ Binlog_Ignore_DB:
+Executed_Gtid_Set:
+1 row in set (0.00 sec)
+
+mysql> CREATE DATABASE replication_mishan;
+Query OK, 1 row affected (0.01 sec)
+
+mysql>
+
+Slave Log Files
+
+mishan@mishan-VirtualBox:~$ sudo su -
+[sudo] password for mishan: 
+root@mishan-VirtualBox:~# sudo apt update
+root@mishan-VirtualBox:~# hostname -I
+10.0.2.15 10.10.102.11 
+root@mishan-VirtualBox:~# sudo apt-get update
+root@mishan-VirtualBox:~# sudo apt-get install mysql-server
+root@mishan-VirtualBox:~# systemctl restart mysql
+root@mishan-VirtualBox:~# systemctl enable mysql
+root@mishan-VirtualBox:~# gedit root@mishan-VirtualBox:~# systemctl restart mysql ;systemctl enable mysql
+root@mishan-VirtualBox:~# gedit /etc/mysql/mysql.conf.d/mysqld.cnf &>/dev/null
+root@mishan-VirtualBox:~# sudo systemctl restart mysql
+root@mishan-VirtualBox:~# sudo systemctl status mysql
+
+root@mishan-VirtualBox:~# sudo mysql
+mysql> STOP SLAVE;
+Query OK, 0 rows affected, 1 warning (0.00 sec)
+
+mysql> CHANGE MASTER TO MASTER_HOST=&apos;10.10.102.2&apos;, MASTER_USER=&apos;replica1&apos;, MASTER_PASSWORD=&apos;mishan1&apos;, MASTER_LOG_FILE=&apos;mysql-bin.000009&apos;, MASTER_LOG_POS=625;
+Query OK, 0 rows affected, 2 warnings (0.02 sec)
+
+mysql> START SLAVE;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> SHOW SLAVE STATUS\G
+*************************** 1. row ***************************
+               Slave_IO_State: 
+                  Master_Host: 10.10.102.2
+                  Master_User: replica1
+                  Master_Port: 3306
+                Connect_Retry: 60
+              Master_Log_File: mysql-bin.000009
+          Read_Master_Log_Pos: 625
+               Relay_Log_File: mishan-VirtualBox-relay-bin.000001
+                Relay_Log_Pos: 4
+        Relay_Master_Log_File: mysql-bin.000009
+             Slave_IO_Running: No
+            Slave_SQL_Running: Yes
+              Replicate_Do_DB: 
+          Replicate_Ignore_DB: 
+           Replicate_Do_Table: 
+       Replicate_Ignore_Table: 
+      Replicate_Wild_Do_Table: 
+  Replicate_Wild_Ignore_Table: 
+                   Last_Errno: 0
+                   Last_Error: 
+                 Skip_Counter: 0
+          Exec_Master_Log_Pos: 625
+              Relay_Log_Space: 154
+              Until_Condition: None
+               Until_Log_File: 
+                Until_Log_Pos: 0
+           Master_SSL_Allowed: No
+           Master_SSL_CA_File: 
+           Master_SSL_CA_Path: 
+              Master_SSL_Cert: 
+            Master_SSL_Cipher: 
+               Master_SSL_Key: 
+        Seconds_Behind_Master: NULL
+Master_SSL_Verify_Server_Cert: No
+                Last_IO_Errno: 1593
+                Last_IO_Error: Fatal error: The slave I/O thread stops because master and slave have equal MySQL server UUIDs; these UUIDs must be different for replication to work.
+               Last_SQL_Errno: 0
+               Last_SQL_Error: 
+  Replicate_Ignore_Server_Ids: 
+             Master_Server_Id: 1
+                  Master_UUID: 
+             Master_Info_File: /var/lib/mysql/master.info
+                    SQL_Delay: 0
+          SQL_Remaining_Delay: NULL
+      Slave_SQL_Running_State: Slave has read all relay log; waiting for more updates
+           Master_Retry_Count: 86400
+                  Master_Bind: 
+      Last_IO_Error_Timestamp: 191028 23:03:31
+     Last_SQL_Error_Timestamp: 
+               Master_SSL_Crl: 
+           Master_SSL_Crlpath: 
+           Retrieved_Gtid_Set: 
+            Executed_Gtid_Set: 
+                Auto_Position: 0
+         Replicate_Rewrite_DB: 
+                 Channel_Name: 
+           Master_TLS_Version: 
+1 row in set (0.00 sec)
+
+mysql> exit
+Bye
+root@mishan-VirtualBox:~# sudo mysql
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 5
+Server version: 5.7.27-0ubuntu0.18.04.1-log (Ubuntu)
+
+Copyright (c) 2000, 2019, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type &apos;help;&apos; or &apos;\h&apos; for help. Type &apos;\c&apos; to clear the current input statement.
+
+mysql> SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+4 rows in set (0.04 sec)
+
+mysql> STOP SLAVE;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> RESET MASTER;
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> quit
+Bye
+root@mishan-VirtualBox:~# cd/var/lib/mysql
+-su: cd/var/lib/mysql: No such file or directory
+root@mishan-VirtualBox:~# cd /var/lib/mysql
+root@mishan-VirtualBox:/var/lib/mysql# ls -la
+total 122932
+drwx------  5 mysql mysql     4096 Oct 28 23:03 .
+drwxr-xr-x 65 root  root      4096 Oct 25 21:27 ..
+-rw-r-----  1 mysql mysql       56 Oct 25 21:27 auto.cnf
+-rw-r--r--  1 root  root         0 Oct 25 21:27 debian-5.7.flag
+-rw-r-----  1 mysql mysql      288 Oct 28 22:51 ib_buffer_pool
+-rw-r-----  1 mysql mysql 12582912 Oct 28 22:51 ibdata1
+-rw-r-----  1 mysql mysql 50331648 Oct 28 22:51 ib_logfile0
+-rw-r-----  1 mysql mysql 50331648 Oct 25 21:27 ib_logfile1
+-rw-r-----  1 mysql mysql 12582912 Oct 28 22:51 ibtmp1
+-rw-r-----  1 mysql mysql       93 Oct 28 23:03 master.info
+-rw-r-----  1 mysql mysql      154 Oct 28 23:03 mishan-VirtualBox-relay-bin.000001
+-rw-r-----  1 mysql mysql       37 Oct 28 23:03 mishan-VirtualBox-relay-bin.index
+drwxr-x---  2 mysql mysql     4096 Oct 25 21:27 mysql
+drwxr-x---  2 mysql mysql     4096 Oct 25 21:27 performance_schema
+-rw-r-----  1 mysql mysql       69 Oct 28 23:08 relay-log.info
+drwxr-x---  2 mysql mysql    12288 Oct 25 21:27 sys
+root@mishan-VirtualBox:/var/lib/mysql# cp auto.cnf ./autobackupcnffile
+root@mishan-VirtualBox:/var/lib/mysql# rm auto.cnf
+root@mishan-VirtualBox:/var/lib/mysql# sudo systemctl restart mysql
+root@mishan-VirtualBox:/var/lib/mysql# sudo mysql
+
+mysql> START SLAVE;
+Query OK, 0 rows affected, 1 warning (0.00 sec)
+
+mysql> SHOW SLAVE STATUS\G
+*************************** 1. row ***************************
+               Slave_IO_State: Waiting for master to send event
+                  Master_Host: 10.10.102.2
+                  Master_User: replica1
+                  Master_Port: 3306
+                Connect_Retry: 60
+              Master_Log_File: mysql-bin.000009
+          Read_Master_Log_Pos: 826
+               Relay_Log_File: mishan-VirtualBox-relay-bin.000003
+                Relay_Log_Pos: 521
+        Relay_Master_Log_File: mysql-bin.000009
+             Slave_IO_Running: Yes
+            Slave_SQL_Running: Yes
+              Replicate_Do_DB: 
+          Replicate_Ignore_DB: 
+           Replicate_Do_Table: 
+       Replicate_Ignore_Table: 
+      Replicate_Wild_Do_Table: 
+  Replicate_Wild_Ignore_Table: 
+                   Last_Errno: 0
+                   Last_Error: 
+                 Skip_Counter: 0
+          Exec_Master_Log_Pos: 826
+              Relay_Log_Space: 740
+              Until_Condition: None
+               Until_Log_File: 
+                Until_Log_Pos: 0
+           Master_SSL_Allowed: No
+           Master_SSL_CA_File: 
+           Master_SSL_CA_Path: 
+              Master_SSL_Cert: 
+            Master_SSL_Cipher: 
+               Master_SSL_Key: 
+        Seconds_Behind_Master: 0
+Master_SSL_Verify_Server_Cert: No
+                Last_IO_Errno: 0
+                Last_IO_Error: 
+               Last_SQL_Errno: 0
+               Last_SQL_Error: 
+  Replicate_Ignore_Server_Ids: 
+             Master_Server_Id: 1
+                  Master_UUID: 20ffe85e-f798-11e9-9772-0800278e435e
+             Master_Info_File: /var/lib/mysql/master.info
+                    SQL_Delay: 0
+          SQL_Remaining_Delay: NULL
+      Slave_SQL_Running_State: Slave has read all relay log; waiting for more updates
+           Master_Retry_Count: 86400
+                  Master_Bind: 
+      Last_IO_Error_Timestamp: 
+     Last_SQL_Error_Timestamp: 
+               Master_SSL_Crl: 
+           Master_SSL_Crlpath: 
+           Retrieved_Gtid_Set: 
+            Executed_Gtid_Set: 
+                Auto_Position: 0
+         Replicate_Rewrite_DB: 
+                 Channel_Name: 
+           Master_TLS_Version: 
+1 row in set (0.00 sec)
+
+mysql> SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| replication_mishan |
+| sys                |
++--------------------+
+5 rows in set (0.00 sec)
+
+mysql>     
+
