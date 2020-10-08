@@ -1,0 +1,39 @@
+select f.ft_legal_name as 'Food Truck', c.cou_name as'Country', pro_name as 'Food Served', round((s.st_qte * s.st_amount), 2) as 'Revenue'
+from foodtruck as f
+join address as a
+on f.add_id = a.add_id
+join country as c
+on c.cou_id = a.cou_id
+join sales as sa
+on f.ft_id = sa.ft_id
+join salestransaction as s
+on sa.s_id = s.s_id
+join product as p
+on p.pro_id = s.pro_id;
+
+
+
+select concat(p.p_lname, ', ', p.p_fname) as 'Employee Name', c.cou_name as 'Country', t.tc_totalhours as 'Total Hours', c.cou_overtimestart as 'Allowable Hours ', (t.tc_totalhours - c.cou_overtimestart) as 'Overtime'
+from person as p
+join address as a
+on p.add_id = a.add_id
+join country as c 
+on c.cou_id = a.cou_id
+join employee as e
+on p.p_id = e.p_id
+join projecttask as pt
+on e.emp_id = pt.emp_id
+join timecard as t
+on pt.pt_id = t.pt_id
+where (t.tc_totalhours > 40 and c.cou_name = 'USA') or (t.tc_totalhours > 36 and c.cou_name = 'UK')
+order by c.cou_name;
+
+
+select f.ft_legal_name as 'Food Truck', p.pr_name as 'Project', p.pr_estimatedhours as 'Estimated Hours', p.pr_completedhours as 'Actual Hours',
+p.pr_estimatedhours - p.pr_completedhours as 'Remaining Hours', round(i.inv_amount, 2) as 'Billing'
+from foodtruck as f
+join project as p
+on f.ft_id = p.ft_id
+join invoice as i
+on p.pr_id = i.pr_id;
+updated sql file and reports
