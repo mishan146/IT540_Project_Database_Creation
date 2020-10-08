@@ -57,8 +57,3 @@ join country as c on a.cou_id = c.cou_id
 group by c.cou_name
 order by count(f.ft_legal_name) desc;
 end
-stored procedures
-Diawara, Amina
-Thu 11/21/2019 6:41 PM
-Diawara, Amina
-Thu 11/21/2019 6:22 PM
